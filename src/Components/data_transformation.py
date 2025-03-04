@@ -5,6 +5,7 @@ import os
 import numpy as np
 import pandas as pd
 from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import LabelEncoder
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder,StandardScaler
@@ -53,12 +54,14 @@ class DataTransformation:
 
             target_column_name = "label"
             numerical_columns = ["N","P","K","temperature","humidity","ph","rainfall"]
+            label_encoder = LabelEncoder()
 
             input_feature_train_df = train_df.drop(columns=[target_column_name],axis=1)
-            target_feature_train_df = train_df[target_column_name]
+            target_feature_train_df = label_encoder.fit_transform(train_df[target_column_name])
 
             input_feature_test_df = test_df.drop(columns=[target_column_name],axis=1)
-            target_feature_test_df = test_df[target_column_name]
+            target_feature_test_df = label_encoder.transform(test_df[target_column_name])
+
 
             logging.info(f"Applying preprocessing object on training and testing dataframe")
 
